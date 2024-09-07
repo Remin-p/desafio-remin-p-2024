@@ -65,16 +65,22 @@ class RecintosZoo {
         const recintosTotais = Object.keys(recintos).length;
         let recintosViaveis = [], espacoTotal, espacoLivre, animaisOcupandoEspaco;
 
+        // VERIFICAÇÕES
+        // Verifica se a quantidade é válida
+        if (quantidade <= 0) {
+            resultado.erro = "Quantidade inválida"
+            return resultado
+        }
+
         // Verifica se o animal especificado é válido como parte do objeto "animais"
         if (!animais.hasOwnProperty(animal)){
             resultado.erro = "Animal inválido"
-            console.log(resultado)
             return resultado
         }
         
         // Loop para analisar todos os recintos existentes
         for(let i=1;i<=recintosTotais;i++){
-            espacoTotal = recintos[i].tamanho
+            espacoTotal = recintos[i].tamanho;
 
             animaisOcupandoEspaco = Object.values(recintos[i].animais) // Transformar em um array com a quantidade dos animais no recinto
 
@@ -84,15 +90,13 @@ class RecintosZoo {
             
             espacoLivre = espacoTotal - animaisOcupandoEspaco 
             
-            if (quantidade < recintos[i].tamanho){
-                recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`)
+            if (quantidade < recintos[i].tamanho){// Adiciona o recinto ao array de recintos viáveis se ele for viável
+                recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
                 resultado.recintosViaveis = recintosViaveis
             }
 
             if (recintosViaveis.length < 1) resultado.erro = "Não há recinto viável"
         }
-        console.log(resultado)
-
         return resultado
     }
 
