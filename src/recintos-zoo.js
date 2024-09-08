@@ -88,7 +88,8 @@ class RecintosZoo {
         for(let i=1;i<=recintosTotais;i++){
             espacoTotal = recintos[i].tamanho;
             
-            qtdEspeciesDiferentes = Object.values(recintos[i].animais).length - 1 // Considerar um espaço extra como ocupado para quando há mais de uma espécie no recinto
+            qtdEspeciesDiferentes = Object.values(recintos[i].animais).length
+            if (!qtdEspeciesDiferentes < 1) qtdEspeciesDiferentes-- // Subtrair a quantidade de espécies, mas não considerar caso ela seja negativa
 
             especiesDiferentes = Object.keys(recintos[i].animais) // Definir todos os animais que já estão dentro do recinto
 
@@ -98,13 +99,17 @@ class RecintosZoo {
 
             espacoLivre = espacoTotal - tamanhoOcupado - qtdEspeciesDiferentes // TODO: Mudar isso
             
+            console.log("especies:",qtdEspeciesDiferentes)
+            console.log("tamanho:",tamanhoOcupado)
+
             if (quantidade <= espacoLivre){// Adiciona o recinto ao array de recintos viáveis se ele for viável
                 recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
                 resultado.recintosViaveis = recintosViaveis
             }
-
-            if (recintosViaveis.length < 1) resultado.erro = "Não há recinto viável"
+            tamanhoOcupado = 0 // Redefinir a variável após o final das contas
         }
+        if (recintosViaveis.length < 1) resultado.erro = "Não há recinto viável"
+
         return resultado
     }
 
