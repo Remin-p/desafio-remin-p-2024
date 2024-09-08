@@ -68,9 +68,12 @@ class RecintosZoo {
         // Objetos em JavaScript são case-sensitive
         animal = animal.toLowerCase()
 
+        // Quantidade não deve ser processada caso não seja um número.
+        quantidade = parseInt(quantidade)
+
         // VERIFICAÇÕES
         // Verificar se a quantidade é válida
-        if (quantidade <= 0) {
+        if (quantidade <= 0 || Number.isNaN(quantidade)) {
             resultado.erro = "Quantidade inválida"
             return resultado
         }
@@ -85,7 +88,7 @@ class RecintosZoo {
         for(let i=1;i<=recintosTotais;i++){
             espacoTotal = recintos[i].tamanho;
             
-            qtdEspeciesDiferentes = Object.values(recintos[i].animais).length // Transformar em um array com a quantidade dos animais no recinto
+            qtdEspeciesDiferentes = Object.values(recintos[i].animais).length - 1 // Considerar um espaço extra como ocupado para quando há mais de uma espécie no recinto
 
             especiesDiferentes = Object.keys(recintos[i].animais) // Definir todos os animais que já estão dentro do recinto
 
