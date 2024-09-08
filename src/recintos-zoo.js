@@ -7,8 +7,7 @@ class RecintosZoo {
                 bioma: "savana",
                 tamanho: 10,
                 animais: {
-                    macaco: 3,
-                    gazela: 2 // APENAS PARA TESTES, REMOVER APÓS TERMINAR
+                    macaco: 3
                 }
             },
             2: {
