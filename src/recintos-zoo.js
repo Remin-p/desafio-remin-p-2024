@@ -7,7 +7,8 @@ class RecintosZoo {
                 bioma: "savana",
                 tamanho: 10,
                 animais: {
-                    macaco: 3
+                    macaco: 3,
+                    gazela: 2 // APENAS PARA TESTES, REMOVER APÓS TERMINAR
                 }
             },
             2: {
@@ -31,7 +32,7 @@ class RecintosZoo {
                 bioma: "savana",
                 tamanho: 9,
                 animais: {
-                    leao: 1,
+                    leao: 1
                 }
             }
         }
@@ -63,7 +64,7 @@ class RecintosZoo {
         }
         let resultado = {}
         const recintosTotais = Object.keys(recintos).length;
-        let recintosViaveis = [], espacoTotal, espacoLivre, qtdEspeciesDiferentes, especiesDiferentes, tamanhoOcupado;
+        let recintosViaveis = [], espacoTotal, espacoLivre, qtdEspeciesDiferentes, especiesDiferentes, tamanhoOcupado, animaisNoRecinto, tamanhoOcupadoFinal = 0, tamanhoAnimal;
 
         // Objetos em JavaScript são case-sensitive
         animal = animal.toLowerCase()
@@ -93,20 +94,41 @@ class RecintosZoo {
 
             especiesDiferentes = Object.keys(recintos[i].animais) // Definir todos os animais que já estão dentro do recinto
 
-            if(animais.hasOwnProperty(especiesDiferentes)){
-                tamanhoOcupado = recintos[i].animais[especiesDiferentes] * animais[especiesDiferentes].tamanho // Calcular o tamanho total que o animal está ocupando dentro do recinto, contando com a key "tamanho" definida no objeto "animais"
-            }
+            for(let x=0;x<especiesDiferentes.length;x++){
+                if(animais.hasOwnProperty(especiesDiferentes[x])){
+                    animaisNoRecinto = recintos[i].animais[especiesDiferentes[x]]
 
-            espacoLivre = espacoTotal - tamanhoOcupado - qtdEspeciesDiferentes // TODO: Mudar isso
-            
-            console.log("especies:",qtdEspeciesDiferentes)
-            console.log("tamanho:",tamanhoOcupado)
+                    tamanhoAnimal = animais[especiesDiferentes[x]].tamanho
+
+                    tamanhoOcupado = animaisNoRecinto * tamanhoAnimal // Calcular o tamanho total que o animal está ocupando dentro do recinto, contando com a key "tamanho" definida no objeto "animais"
+                    
+                    tamanhoOcupadoFinal += tamanhoOcupado;
+
+                    console.log(`##### Espécie ${especiesDiferentes[x]} do Recinto ${i} #####`)
+                    console.log("animaisNoRecinto:",animaisNoRecinto)
+                    console.log("tamanhoOcupado:",tamanhoOcupado)
+                    console.log("tamanhoOcupadoFinal:",tamanhoOcupadoFinal)
+                    console.log("##########")
+                }
+            }
+                
+            espacoLivre = espacoTotal - tamanhoOcupadoFinal - qtdEspeciesDiferentes // TODO: Mudar isso
+
+            console.log(`========== Recinto ${i} ==========`)
+            console.log("especiesDiferentes",especiesDiferentes)
+            console.log("animaisNoRecinto:",animaisNoRecinto)
+            console.log("QtdEspeciesDiferentes:",qtdEspeciesDiferentes)
+            console.log("tamanhoOcupado:",tamanhoOcupadoFinal)
 
             if (quantidade <= espacoLivre){// Adiciona o recinto ao array de recintos viáveis se ele for viável
                 recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
                 resultado.recintosViaveis = recintosViaveis
             }
-            tamanhoOcupado = 0 // Redefinir a variável após o final das contas
+
+            // Redefinir a variável após o final das contas
+            animaisNoRecinto = 0
+            tamanhoOcupado = 0 
+            tamanhoOcupadoFinal = 0
         }
         if (recintosViaveis.length < 1) resultado.erro = "Não há recinto viável"
 
