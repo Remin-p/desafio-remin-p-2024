@@ -63,7 +63,7 @@ class RecintosZoo {
         }
         let resultado = {}
         const recintosTotais = Object.keys(recintos).length;
-        let recintosViaveis = [], espacoTotal, espacoLivre, qtdEspeciesDiferentes, especiesDiferentes, tamanhoOcupado, animaisNoRecinto, tamanhoOcupadoFinal = 0, tamanhoAnimal, tamanhoAnimalSelecionado, encontrarBiomaValido;
+        let recintosViaveis = [], espacoTotal, espacoLivre, qtdEspeciesDiferentes, especiesDiferentes, tamanhoOcupado, animaisNoRecinto, tamanhoOcupadoAnimaisRecinto = 0, tamanhoAnimal, tamanhoAnimalSelecionado, encontrarBiomaValido;
 
         // Objetos em JavaScript são case-sensitive
         animal = animal.toLowerCase()
@@ -101,31 +101,37 @@ class RecintosZoo {
 
                     tamanhoOcupado = animaisNoRecinto * tamanhoAnimal // Calcular o tamanho total que o animal está ocupando dentro do recinto, contando com a key "tamanho" definida no objeto "animais"
                     
-                    tamanhoOcupadoFinal += tamanhoOcupado;
+                    tamanhoOcupadoAnimaisRecinto += tamanhoOcupado;
 
                     // DEBUG
                     // console.log(`##### Espécie ${especiesDiferentes[x]} do Recinto ${i} #####`)
                     // console.log("animaisNoRecinto:",animaisNoRecinto)
                     // console.log("tamanhoOcupado:",tamanhoOcupado)
-                    // console.log("tamanhoOcupadoFinal:",tamanhoOcupadoFinal)
+                    // console.log("tamanhoOcupadoAnimaisRecinto:",tamanhoOcupadoAnimaisRecinto)
                     // console.log("##########")
                 }
             }
-            // Considerar o(s) animal(is) especificado(s) e calcular o tamanho que ele(s) ocupará(ão)
+            // Considerar o animal especificado como uma espécie diferente caso haja multiplas espécies dentro do recinto
+            if((!recintos[i].animais.hasOwnProperty(animal)) && Object.entries(recintos[i].animais).length > 0) {
+                qtdEspeciesDiferentes++
+            }
+
+            
+            // Considerar o(s) animal(is) que já estão dentro do recinto e calcular o tamanho que ele(s) ocupará(ão)
             tamanhoAnimalSelecionado = quantidade * animais[animal].tamanho 
                 
-            espacoLivre = espacoTotal - tamanhoOcupadoFinal - qtdEspeciesDiferentes - tamanhoAnimalSelecionado
+            //
+            espacoLivre = espacoTotal - tamanhoOcupadoAnimaisRecinto - qtdEspeciesDiferentes - tamanhoAnimalSelecionado
 
             // DEBUG
             // console.log(`========== Recinto ${i} ==========`)
             // console.log("especiesDiferentes",especiesDiferentes)
             // console.log("animaisNoRecinto:",animaisNoRecinto)
             // console.log("QtdEspeciesDiferentes:",qtdEspeciesDiferentes)
-            // console.log("tamanhoOcupado:",tamanhoOcupadoFinal)
+            // console.log("tamanhoOcupado:",tamanhoOcupadoAnimaisRecinto)
 
             // VERIFICAÇÃO DE BIOMAS
-            // Verifica se o animal se adapta ao bioma do recinto atual (se o bioma está incluso no array "biomas" do objeto "animais")
-
+            // Verifica se o animal se adapta ao bioma do recinto atual (se o bioma está incluso no array "biomas" do objeto "animais", ou se for string, verificar se a string faz parte do array)
             if(Array.isArray(animais[animal].bioma)){
                 encontrarBiomaValido = animais[animal].bioma.some(value => (recintos[i].bioma).includes(value))
             } else {
@@ -138,7 +144,7 @@ class RecintosZoo {
                     recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
                     resultado.recintosViaveis = recintosViaveis
                 }
-            } //else console.log(i,false) // DEBUG
+            }
             
             // DEBUG
             // console.log("Biomas que o animal habita:",animais[animal].bioma)
@@ -148,7 +154,7 @@ class RecintosZoo {
             // Redefinir as variáveis após o final das contas
             animaisNoRecinto = 0
             tamanhoOcupado = 0 
-            tamanhoOcupadoFinal = 0
+            tamanhoOcupadoAnimaisRecinto = 0
             espacoLivre = 0
         }
         if (recintosViaveis.length < 1) resultado.erro = "Não há recinto viável"
