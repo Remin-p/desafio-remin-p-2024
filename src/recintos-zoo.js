@@ -63,7 +63,7 @@ class RecintosZoo {
         }
         let resultado = {}
         const recintosTotais = Object.keys(recintos).length;
-        let recintosViaveis = [], espacoTotal, espacoLivre, qtdEspeciesDiferentes, especiesDiferentes, tamanhoOcupado, animaisNoRecinto, tamanhoOcupadoFinal = 0, tamanhoAnimal, tamanhoAnimalSelecionado;
+        let recintosViaveis = [], espacoTotal, espacoLivre, qtdEspeciesDiferentes, especiesDiferentes, tamanhoOcupado, animaisNoRecinto, tamanhoOcupadoFinal = 0, tamanhoAnimal, tamanhoAnimalSelecionado, encontrarBiomaValido;
 
         // Objetos em JavaScript são case-sensitive
         animal = animal.toLowerCase()
@@ -123,11 +123,27 @@ class RecintosZoo {
             // console.log("QtdEspeciesDiferentes:",qtdEspeciesDiferentes)
             // console.log("tamanhoOcupado:",tamanhoOcupadoFinal)
 
-            
-            if (espacoLivre > -1){// Adiciona o recinto ao array de recintos viáveis se ele tiver espaço.
-                recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
-                resultado.recintosViaveis = recintosViaveis
+            // VERIFICAÇÃO DE BIOMAS
+            // Verifica se o animal se adapta ao bioma do recinto atual (se o bioma está incluso no array "biomas" do objeto "animais")
+
+            if(Array.isArray(animais[animal].bioma)){
+                encontrarBiomaValido = animais[animal].bioma.some(value => (recintos[i].bioma).includes(value))
+            } else {
+                encontrarBiomaValido = recintos[i].bioma.includes(animais[animal].bioma)
             }
+
+            if(encontrarBiomaValido == true){
+                console.log("Recinto com bioma viável encontrado:",i,recintos[i].bioma, "habita:", animais[animal].bioma) // DEBUG
+                if (espacoLivre > -1){// Adiciona o recinto ao array de recintos viáveis se ele tiver espaço.
+                    recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
+                    resultado.recintosViaveis = recintosViaveis
+                }
+            } //else console.log(i,false) // DEBUG
+            
+            // DEBUG
+            // console.log("Biomas que o animal habita:",animais[animal].bioma)
+            // console.log("Bioma do recinto:",recintos[i].bioma)
+
             
             // Redefinir as variáveis após o final das contas
             animaisNoRecinto = 0
