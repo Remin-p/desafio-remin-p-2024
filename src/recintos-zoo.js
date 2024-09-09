@@ -38,27 +38,33 @@ class RecintosZoo {
         const animais = {
             leao: {
                 tamanho: 3,
-                bioma: "savana"
+                bioma: "savana",
+                conviveCom: ["leao"]
             },
             leopardo: {
                 tamanho: 2,
-                bioma: "savana"
+                bioma: "savana",
+                conviveCom: ["leopardo"]
             },
             crocodilo: {
                 tamanho: 3,
-                bioma: "rio"
+                bioma: "rio",
+                conviveCom: ["crocodilo"]
             },
             macaco: {
                 tamanho: 1,
-                bioma: ["savana","floresta"]
+                bioma: ["savana","floresta"],
+                conviveCom: ["macaco","gazela","hipopotamo"]
             },
             gazela: {
                 tamanho: 2,
-                bioma: "savana"
+                bioma: "savana",
+                conviveCom: ["macaco","gazela","hipopotamo"]
             },
             hipopotamo: {
                 tamanho: 4,
-                bioma: ["savana","rio"]
+                bioma: ["savana","rio"],
+                conviveCom: ["macaco","gazela","hipopotamo"]
             }
         }
         let resultado = {}
