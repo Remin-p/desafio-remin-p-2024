@@ -99,6 +99,7 @@ class RecintosZoo {
 
             especiesDiferentes = Object.keys(recintos[i].animais) // Definir todos os animais que já estão dentro do recinto
 
+            // Loop para analisar todas as espécies de animais no recinto especificado
             for(let x=0;x<especiesDiferentes.length;x++){
                 if(animais.hasOwnProperty(especiesDiferentes[x])){
                     animaisNoRecinto = recintos[i].animais[especiesDiferentes[x]]
@@ -126,7 +127,7 @@ class RecintosZoo {
             // Considerar o(s) animal(is) que já estão dentro do recinto e calcular o tamanho que ele(s) ocupará(ão)
             tamanhoAnimalSelecionado = quantidade * animais[animal].tamanho 
                 
-            //
+            
             espacoLivre = espacoTotal - tamanhoOcupadoAnimaisRecinto - qtdEspeciesDiferentes - tamanhoAnimalSelecionado
 
             // DEBUG
@@ -137,20 +138,27 @@ class RecintosZoo {
             // console.log("tamanhoOcupado:",tamanhoOcupadoAnimaisRecinto)
 
             // VERIFICAÇÃO DE BIOMAS
-            // Verifica se o animal se adapta ao bioma do recinto atual (se o bioma está incluso no array "biomas" do objeto "animais", ou se for string, verificar se a string faz parte do array)
+            // Define a condição para checar se os animais
             if(Array.isArray(animais[animal].bioma)){
-                encontrarBiomaValido = animais[animal].bioma.some(value => (recintos[i].bioma).includes(value))
+                encontrarBiomaValido = animais[animal].bioma.some(value => recintos[i].bioma.includes(value))
             } else {
                 encontrarBiomaValido = recintos[i].bioma.includes(animais[animal].bioma)
             }
-
+            
+            // Verifica se o animal se adapta ao bioma do recinto atual (se o bioma está incluso no array "biomas" do objeto "animais", ou se for string, verificar se a string faz parte do array)
             if(encontrarBiomaValido == true){
-                console.log("Recinto com bioma viável encontrado:",i,recintos[i].bioma, "habita:", animais[animal].bioma) // DEBUG
-                if (espacoLivre > -1){// Adiciona o recinto ao array de recintos viáveis se ele tiver espaço.
-                    recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
-                    resultado.recintosViaveis = recintosViaveis
+                // console.log("Recinto com bioma viável encontrado:",i,recintos[i].bioma, "habita:", animais[animal].bioma) // DEBUG
+                
+                // Verifica se o animal convive com os animais que já estão no recinto ou se o recinto não tiver animais
+                if(animais[animal].conviveCom.some(value => recintos[i].animais.hasOwnProperty(value)) || Object.keys(recintos[i].animais).length === 0){
+                    console.log(true, i, animais[animal].conviveCom, recintos[i].animais,animal) // DEBUG
+                    if (espacoLivre > -1){// Adiciona o recinto ao array de recintos viáveis se ele tiver espaço.
+                        recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
+                        resultado.recintosViaveis = recintosViaveis
+                    }
                 }
             }
+            
             
             // DEBUG
             // console.log("Biomas que o animal habita:",animais[animal].bioma)
