@@ -37,5 +37,11 @@ describe('Recintos do Zoologico', () => {
         expect(resultado.recintosViaveis.length).toBe(3);
     });
 
+    test('Deve encontrar recinto para 2 hipopótamos', () => {
+        const resultado = new RecintosZoo().analisaRecintos("HIPOPOTAMO",2);
+        expect(resultado.erro).toBeFalsy();
+        expect(resultado.recintosViaveis[0]).toBe("Recinto 4 (espaço livre: 0 total: 8)");
+    });
+
 });
 

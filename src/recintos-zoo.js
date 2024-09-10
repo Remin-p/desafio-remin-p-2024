@@ -78,17 +78,18 @@ class RecintosZoo {
         quantidade = parseInt(quantidade)
 
         // VERIFICAÇÕES
+        // Verificar se o animal especificado é válido como parte do objeto "animais"
+        if (!animais.hasOwnProperty(animal)){
+            resultado.erro = "Animal inválido"
+            return resultado
+        }
+
         // Verificar se a quantidade é válida
         if (quantidade <= 0 || Number.isNaN(quantidade)) {
             resultado.erro = "Quantidade inválida"
             return resultado
         }
 
-        // Verificar se o animal especificado é válido como parte do objeto "animais"
-        if (!animais.hasOwnProperty(animal)){
-            resultado.erro = "Animal inválido"
-            return resultado
-        }
 
         // Loop para analisar todos os recintos existentes
         for(let i=1;i<=recintosTotais;i++){
@@ -144,18 +145,20 @@ class RecintosZoo {
             } else {
                 encontrarBiomaValido = recintos[i].bioma.includes(animais[animal].bioma)
             }
-            
+
+
             // Verifica se o animal se adapta ao bioma do recinto atual (se o bioma está incluso no array "biomas" do objeto "animais", ou se for string, verificar se a string faz parte do array)
             if(encontrarBiomaValido == true){
-                // console.log("Recinto com bioma viável encontrado:",i,recintos[i].bioma, "habita:", animais[animal].bioma) // DEBUG
-                
+                //console.log("Recinto com bioma viável encontrado:",i,recintos[i].bioma, "habita:", animais[animal].bioma) // DEBUG
                 // Verifica se o animal convive com os animais que já estão no recinto ou se o recinto não tiver animais
                 if(animais[animal].conviveCom.some(value => recintos[i].animais.hasOwnProperty(value)) || Object.keys(recintos[i].animais).length === 0){
-                    console.log(true, i, animais[animal].conviveCom, recintos[i].animais,animal) // DEBUG
+                    //console.log(true, i, animais[animal].conviveCom, recintos[i].animais,animal) // DEBUG
+                    //console.log(`Animal "${animal}" convive com os animais "${animais[animal].conviveCom}",`,recintos[i].animais, "estão no recinto",i) // DEBUG
                     if (espacoLivre > -1){// Adiciona o recinto ao array de recintos viáveis se ele tiver espaço.
+                        //console.log("Adicionado ao recinto.")
                         recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
                         resultado.recintosViaveis = recintosViaveis
-                    }
+                    } //else console.log("XXX Não há espaço no recinto",i,`para ${quantidade+" "+animal}(s), espaço após a introdução do animal será`,espacoLivre,"! XXX") // DEBUG
                 }
             }
             
