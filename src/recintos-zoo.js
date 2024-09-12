@@ -16,7 +16,7 @@ class RecintosZoo {
                 animais: {}
             },
             3: {
-                bioma: ["savana","rio"],
+                bioma: "savana e rio",
                 tamanho: 7,
                 animais: {
                     gazela: 1
@@ -38,17 +38,17 @@ class RecintosZoo {
         const animais = {
             leao: {
                 tamanho: 3,
-                bioma: "savana",
+                bioma: ["savana"],
                 conviveCom: ["leao"]
             },
             leopardo: {
                 tamanho: 2,
-                bioma: "savana",
+                bioma: ["savana"],
                 conviveCom: ["leopardo"]
             },
             crocodilo: {
                 tamanho: 3,
-                bioma: "rio",
+                bioma: ["rio"],
                 conviveCom: ["crocodilo"]
             },
             macaco: {
@@ -58,7 +58,7 @@ class RecintosZoo {
             },
             gazela: {
                 tamanho: 2,
-                bioma: "savana",
+                bioma: ["savana"],
                 conviveCom: ["macaco","gazela","hipopotamo"]
             },
             hipopotamo: {
@@ -139,11 +139,20 @@ class RecintosZoo {
             // console.log("tamanhoOcupado:",tamanhoOcupadoAnimaisRecinto)
 
             // VERIFICAÇÃO DE BIOMAS
-            // Define a condição para checar se os animais
-            if(Array.isArray(animais[animal].bioma)){
-                encontrarBiomaValido = animais[animal].bioma.some(value => recintos[i].bioma.includes(value))
-            } else {
-                encontrarBiomaValido = recintos[i].bioma.includes(animais[animal].bioma)
+            // Define a condição para checar se o animal especificado se encontra em um recinto em que se adapta ao bioma
+
+            encontrarBiomaValido = animais[animal].bioma.some(value => recintos[i].bioma.includes(value))
+
+            // Regra 4: Hipopótamo(s) só tolera(m) outras espécies estando num recinto com savana e rio
+            if(
+                animal === "hipopotamo" && 
+                Object.keys(recintos[i].animais).length > 0 && 
+                (!recintos[i].bioma.includes('savana') ||
+                !recintos[i].bioma.includes('rio')) &&
+                encontrarBiomaValido == true
+            ){
+                encontrarBiomaValido = false
+                console.log("Mudou para o recinto:",i,true)
             }
 
 
@@ -162,11 +171,9 @@ class RecintosZoo {
                 }
             }
             
-            
             // DEBUG
             // console.log("Biomas que o animal habita:",animais[animal].bioma)
             // console.log("Bioma do recinto:",recintos[i].bioma)
-
             
             // Redefinir as variáveis após o final das contas
             animaisNoRecinto = 0

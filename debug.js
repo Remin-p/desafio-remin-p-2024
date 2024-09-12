@@ -11,5 +11,3 @@ for(let i = 0;i < 5;i++){
         console.log(runZoo.analisaRecintos(`${allAnimals[x]}`,`${i}`));
     }
 }
-
-//console.log(runZoo.analisaRecintos("hipopotamo","2"))
