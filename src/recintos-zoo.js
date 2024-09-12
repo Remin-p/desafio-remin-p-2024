@@ -129,15 +129,20 @@ class RecintosZoo {
             // Regra 4: Hipopótamo(s) só tolera(m) outras espécies estando num recinto com savana e rio
             if(
                 animal === "hipopotamo" && 
-                Object.keys(recintos[i].animais).length > 0 && 
+                especiesDiferentes.length > 0 && 
                 !recintos[i].bioma.includes('savana e rio') &&
                 encontrarBiomaValido == true
             ){
-                encontrarBiomaValido = false
+                encontrarBiomaValido = false // TODO: colocar uma variável dedicada a verificar se o animal convive com os outros animais no recinto
+            }
+
+            // Regra 5: Um macaco não se sente confortável sem outro animal no recinto, seja da mesma ou outra espécie
+            if(animal === "macaco" && quantidade <= 1 && especiesDiferentes.length == 0){
+                encontrarBiomaValido = false // TODO: colocar uma variável dedicada a verificar se o animal convive com os outros animais no recinto
             }
 
             if(encontrarBiomaValido == true){
-                if(animais[animal].conviveCom.some(value => recintos[i].animais.hasOwnProperty(value)) || Object.keys(recintos[i].animais).length === 0){
+                if(animais[animal].conviveCom.some(value => recintos[i].animais.hasOwnProperty(value)) || especiesDiferentes.length === 0){
                     if (espacoLivre > -1){
                         recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
                         resultado.recintosViaveis = recintosViaveis
