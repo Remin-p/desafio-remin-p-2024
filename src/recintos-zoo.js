@@ -110,71 +110,40 @@ class RecintosZoo {
                     tamanhoOcupado = animaisNoRecinto * tamanhoAnimal // Calcular o tamanho total que o animal está ocupando dentro do recinto, contando com a key "tamanho" definida no objeto "animais"
                     
                     tamanhoOcupadoAnimaisRecinto += tamanhoOcupado;
-
-                    // DEBUG
-                    // console.log(`##### Espécie ${especiesDiferentes[x]} do Recinto ${i} #####`)
-                    // console.log("animaisNoRecinto:",animaisNoRecinto)
-                    // console.log("tamanhoOcupado:",tamanhoOcupado)
-                    // console.log("tamanhoOcupadoAnimaisRecinto:",tamanhoOcupadoAnimaisRecinto)
-                    // console.log("##########")
                 }
             }
             // Considerar o animal especificado como uma espécie diferente caso haja multiplas espécies dentro do recinto
             if((!recintos[i].animais.hasOwnProperty(animal)) && Object.entries(recintos[i].animais).length > 0) {
                 qtdEspeciesDiferentes++
             }
-
             
             // Considerar o(s) animal(is) que já estão dentro do recinto e calcular o tamanho que ele(s) ocupará(ão)
             tamanhoAnimalSelecionado = quantidade * animais[animal].tamanho 
-                
             
             espacoLivre = espacoTotal - tamanhoOcupadoAnimaisRecinto - qtdEspeciesDiferentes - tamanhoAnimalSelecionado
 
-            // DEBUG
-            // console.log(`========== Recinto ${i} ==========`)
-            // console.log("especiesDiferentes",especiesDiferentes)
-            // console.log("animaisNoRecinto:",animaisNoRecinto)
-            // console.log("QtdEspeciesDiferentes:",qtdEspeciesDiferentes)
-            // console.log("tamanhoOcupado:",tamanhoOcupadoAnimaisRecinto)
-
             // VERIFICAÇÃO DE BIOMAS
             // Define a condição para checar se o animal especificado se encontra em um recinto em que se adapta ao bioma
-
             encontrarBiomaValido = animais[animal].bioma.some(value => recintos[i].bioma.includes(value))
 
             // Regra 4: Hipopótamo(s) só tolera(m) outras espécies estando num recinto com savana e rio
             if(
                 animal === "hipopotamo" && 
                 Object.keys(recintos[i].animais).length > 0 && 
-                (!recintos[i].bioma.includes('savana') ||
-                !recintos[i].bioma.includes('rio')) &&
+                !recintos[i].bioma.includes('savana e rio') &&
                 encontrarBiomaValido == true
             ){
                 encontrarBiomaValido = false
-                console.log("Mudou para o recinto:",i,true)
             }
 
-
-            // Verifica se o animal se adapta ao bioma do recinto atual (se o bioma está incluso no array "biomas" do objeto "animais", ou se for string, verificar se a string faz parte do array)
             if(encontrarBiomaValido == true){
-                //console.log("Recinto com bioma viável encontrado:",i,recintos[i].bioma, "habita:", animais[animal].bioma) // DEBUG
-                // Verifica se o animal convive com os animais que já estão no recinto ou se o recinto não tiver animais
                 if(animais[animal].conviveCom.some(value => recintos[i].animais.hasOwnProperty(value)) || Object.keys(recintos[i].animais).length === 0){
-                    //console.log(true, i, animais[animal].conviveCom, recintos[i].animais,animal) // DEBUG
-                    //console.log(`Animal "${animal}" convive com os animais "${animais[animal].conviveCom}",`,recintos[i].animais, "estão no recinto",i) // DEBUG
-                    if (espacoLivre > -1){// Adiciona o recinto ao array de recintos viáveis se ele tiver espaço.
-                        //console.log("Adicionado ao recinto.")
+                    if (espacoLivre > -1){
                         recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
                         resultado.recintosViaveis = recintosViaveis
-                    } //else console.log("XXX Não há espaço no recinto",i,`para ${quantidade+" "+animal}(s), espaço após a introdução do animal será`,espacoLivre,"! XXX") // DEBUG
+                    }
                 }
             }
-            
-            // DEBUG
-            // console.log("Biomas que o animal habita:",animais[animal].bioma)
-            // console.log("Bioma do recinto:",recintos[i].bioma)
-            
             // Redefinir as variáveis após o final das contas
             animaisNoRecinto = 0
             tamanhoOcupado = 0 
