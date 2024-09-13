@@ -14,4 +14,4 @@ for(let i = 0;i <= 5;i++){
 }
 
 
-//console.log(runZoo.analisaRecintos("hipopotamo",2))
+//console.log(runZoo.analisaRecintos("leao",2))

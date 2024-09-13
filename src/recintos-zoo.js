@@ -69,7 +69,7 @@ class RecintosZoo {
         }
         let resultado = {}
         const recintosTotais = Object.keys(recintos).length;
-        let recintosViaveis = [], espacoTotal, espacoLivre, qtdEspeciesDiferentes, especiesDiferentes, tamanhoOcupado, animaisNoRecinto, tamanhoOcupadoAnimaisRecinto = 0, tamanhoAnimal, tamanhoAnimalSelecionado, encontrarBiomaValido;
+        let recintosViaveis = [], espacoTotal, espacoLivre, qtdEspeciesDiferentes, especiesDiferentes, tamanhoOcupado, animaisNoRecinto, tamanhoOcupadoAnimaisRecinto = 0, tamanhoAnimal, tamanhoAnimalSelecionado, encontrarBiomaValido, animaisConvivem;
 
         // Objetos em JavaScript são case-sensitive
         animal = animal.toLowerCase()
@@ -122,33 +122,28 @@ class RecintosZoo {
             
             espacoLivre = espacoTotal - tamanhoOcupadoAnimaisRecinto - qtdEspeciesDiferentes - tamanhoAnimalSelecionado
 
-            // VERIFICAÇÃO DE BIOMAS
-            // Define a condição para checar se o animal especificado se encontra em um recinto em que se adapta ao bioma
+            //Verificar se o animal especificado irá para um recinto em que se adapta ao bioma
             encontrarBiomaValido = animais[animal].bioma.some(value => recintos[i].bioma.includes(value))
 
+            // Verificar se o animal especificado irá para um recinto com animais que possam conviver com ele
+            animaisConvivem = (animais[animal].conviveCom.some(value => especiesDiferentes.includes(value)) || especiesDiferentes.length === 0)
+            
             // Regra 4: Hipopótamo(s) só tolera(m) outras espécies estando num recinto com savana e rio
-            if(
-                animal === "hipopotamo" && 
-                especiesDiferentes.length > 0 && 
-                !recintos[i].bioma.includes('savana e rio') &&
-                encontrarBiomaValido == true
-            ){
-                encontrarBiomaValido = false // TODO: colocar uma variável dedicada a verificar se o animal convive com os outros animais no recinto
+            if(animal === "hipopotamo" && especiesDiferentes.length > 0 && !recintos[i].bioma.includes('savana e rio') && animaisConvivem == true){
+                animaisConvivem = false
             }
 
             // Regra 5: Um macaco não se sente confortável sem outro animal no recinto, seja da mesma ou outra espécie
-            if(animal === "macaco" && quantidade <= 1 && especiesDiferentes.length == 0){
-                encontrarBiomaValido = false // TODO: colocar uma variável dedicada a verificar se o animal convive com os outros animais no recinto
+            if(animal === "macaco" && quantidade == 1 && especiesDiferentes.length == 0){
+                animaisConvivem = false
             }
 
-            if(encontrarBiomaValido == true){
-                if(animais[animal].conviveCom.some(value => recintos[i].animais.hasOwnProperty(value)) || especiesDiferentes.length === 0){
-                    if (espacoLivre > -1){
-                        recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
-                        resultado.recintosViaveis = recintosViaveis
-                    }
-                }
+            // Após todas as verificações, inserir o animal no recinto
+            if(encontrarBiomaValido === true && animaisConvivem === true && espacoLivre >= 0){
+                recintosViaveis.push(`Recinto ${i} (espaço livre: ${espacoLivre} total: ${espacoTotal})`) 
+                resultado.recintosViaveis = recintosViaveis
             }
+            
             // Redefinir as variáveis após o final das contas
             animaisNoRecinto = 0
             tamanhoOcupado = 0 
