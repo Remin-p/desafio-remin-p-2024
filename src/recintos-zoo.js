@@ -96,7 +96,7 @@ class RecintosZoo {
             espacoTotal = recintos[i].tamanho;
             
             qtdEspeciesDiferentes = Object.values(recintos[i].animais).length
-            if (!qtdEspeciesDiferentes < 1) qtdEspeciesDiferentes-- // Subtrair a quantidade de espécies, mas não considerar caso ela seja negativa
+            if (!qtdEspeciesDiferentes < 1) qtdEspeciesDiferentes-- // Subtrair a quantidade de espécies, mas não considerar caso ela se tornará negativa
 
             especiesDiferentes = Object.keys(recintos[i].animais) // Definir todos os animais que já estão dentro do recinto
 
